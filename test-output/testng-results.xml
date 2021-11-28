@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2021-11-28T19:36:47 IST" name="Suite" finished-at="2021-11-28T19:37:13 IST" duration-ms="25357">
+    <groups>
+    </groups>
+    <test started-at="2021-11-28T19:36:47 IST" name="Test" finished-at="2021-11-28T19:37:13 IST" duration-ms="25357">
+      <class name="testfiles.testnghjhj">
+        <test-method is-config="true" signature="beforetest()[pri:0, instance:testfiles.testnghjhj@2893de87]" started-at="2021-11-28T19:36:47 IST" name="beforetest" finished-at="2021-11-28T19:36:54 IST" duration-ms="7133" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforetest -->
+        <test-method is-config="true" signature="beforemethod()[pri:0, instance:testfiles.testnghjhj@2893de87]" started-at="2021-11-28T19:36:54 IST" name="beforemethod" finished-at="2021-11-28T19:37:00 IST" duration-ms="5141" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforemethod -->
+        <test-method signature="tester11()[pri:0, instance:testfiles.testnghjhj@2893de87]" started-at="2021-11-28T19:37:00 IST" name="tester11" finished-at="2021-11-28T19:37:10 IST" duration-ms="10326" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tester11 -->
+        <test-method is-config="true" signature="aftermethod()[pri:0, instance:testfiles.testnghjhj@2893de87]" started-at="2021-11-28T19:37:10 IST" name="aftermethod" finished-at="2021-11-28T19:37:13 IST" duration-ms="2722" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- aftermethod -->
+        <test-method is-config="true" signature="aftertest()[pri:0, instance:testfiles.testnghjhj@2893de87]" started-at="2021-11-28T19:37:13 IST" name="aftertest" finished-at="2021-11-28T19:37:13 IST" duration-ms="0" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- aftertest -->
+      </class> <!-- testfiles.testnghjhj -->
+    </test> <!-- Test -->
+  </suite> <!-- Suite -->
+</testng-results>

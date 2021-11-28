@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml >
+ 
+	<!--Change project name i.e. name of the folder you are running -->
+	<project name="pfmpomtestngty" basedir="." default="Default">
+		
+		<!--Workspace_home reflects our current workspace
+		${basedir} - This will take automatically base directory path i.e. our current project path
+		For Workspace_jars - Give where you keep all jars at one place which are necessary
+		Src_folder is where it refers to src folder of project we choose
+		Build_dir is where our .class files will store when running our code
+		Test_results place where our TestNG results store i.e. test-output in project. If not press f5 to get them 
+		Browser path is where exe file executes in windows see C://programfile/../chrome.exe in ubuntu
+		it is /usr/bin (use which chrome-browser in terminal to get path) use that path.-->
+
+<!-- Initializing properties -->
+	<property environment="env"											   							    />	
+	<property name="Author"            value="Prabhu"                        							/>
+	<property name="Version"           value="1.0"                                   					/>
+	<property name="Workspace_home"    value="${basedir}"                                   			/>
+	<property name="Workspace_jars"    value="C:\Users\TEJA\OneDrive\Desktop\automation\antjars_testng" />
+	<property name="Src_dir"           value="${basedir}/src"                                			/>
+	<property name="Build_dir"         value="${basedir}/build"                              			/>
+	<property name="Testng_results"    value="test-output"                                				/>
+	<property name="Browser"       	   location="C:\Program Files\Google\Chrome\Application"/>
+	<!--property name="file"          	   location="ant/docs/manual/index.html"/ for view report it might use --> 
+
+		<!-- ============ Target: setClassPath (setting classpath) ==================== -->
+<target name="setClassPath" unless="test.classpath">		
+	
+	<path id="classpath_jars">
+		<fileset dir="${Workspace_jars}" includes="*.jar" excludes="*src.jar"/> <!-- check if error comes -->
+	</path>
+	
+	<pathconvert pathsep=";" 
+		property = "test.classpath"
+		refid="classpath_jars">
+	</pathconvert>
+	<!--Path separator for windows is ; and ubuntu/linux is : -->
+
+</target>
+	
+		<!-- ============ TARGET: init (initilizing stuff for us ==================== -->
+		
+<target name="init" depends="setClassPath">
+		
+	<tstamp>
+		<format property="start.time" pattern="dd/MM/yyyy hh:mm aa"/>
+	</tstamp>
+			
+	<echo message="ANT_HOME is set to = ${env.ANT_HOME}"/>
+		
+	<condition property="ANT"
+		value="${env.ANT_HOME}/bin/ant.bat"
+		else="${env.ANT_HOME}/bin/ant">
+		<os family="windows"/>  <!-- change to windows if it is windows -->
+	</condition>
+		
+	<echo message="test.classpath is set to ${test.classpath}"/>
+	
+	
+	<taskdef name="testng" classpath="${test.classpath}"
+			classname="org.testng.TestNGAntTask"> 
+	</taskdef>
+	
+	<!-- check this taskdef -->
+		
+</target>
+		
+		
+	
+	<!-- ============ TARGET: CLEAN ==================== -->
+<target name="Clean">
+	<echo message="Cleaning all..!"/>
+	<delete dir="${Build_dir}"/>
+</target>
+
+	<!-- ============ TARGET: COMPILE ================== -->
+	<target name="Compile" depends="init, Clean">
+		<delete includeemptydirs="true" quiet="true" >
+		<fileset dir="${Build_dir}" includes="**/*" />
+		</delete>
+		<echo message="Making build directory...!"/> 
+		<mkdir dir="${Build_dir}"/>
+		<echo message="classpath-----:${test.classpath}"/>
+		<echo message="Compiling...!"/>
+		<!-- change this java version -->
+		<javac 
+			srcdir="${Src_dir}" 
+			destdir="${Build_dir}" 
+			debug="true" 
+			debuglevel="lines,vars,source" 
+	        target="17"
+			source="17"
+			classpath="${test.classpath}"
+			includeantruntime="false">
+		</javac>
+	</target>
+	<!-- ============ TARGET: build ==================== -->
+	
+		<target name="Build" depends="init">
+			<echo message="Building...!"/>
+		</target>
+
+	<!-- ============ TARGET: RUN ====================== -->
+	<target name="Run_Teja" depends="Compile">
+		<testng classpath="${test.classpath}:${Build_dir}" suitename="suite1">
+		<xmlfileset dir="${Workspace_home}" includes="testngallfiles.xml"/>
+			<!-- Change include xml file which you want to run-->
+	
+		</testng>
+	</target>
+		<!-- balakrishna target -->
+		
+		<target name="Run_balakrishna" depends="Compile">
+				<testng classpath="${test.classpath}:${Build_dir}" suitename="suite1">
+				<xmlfileset dir="${Workspace_home}" includes="testngallfiles.xml"/>
+					<!-- Change include xml file which you want to run-->
+			
+				</testng>
+			</target>
+					
+		<!-- ============ TARGET: DOCS ===================== -->
+	<target name="Java_docs" depends ="setClassPath">
+		<javadoc
+           destdir="docs/api"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="${ant.project.name} API">
+			
+			<fileset dir="${Src_dir}" defaultexcludes="yes">
+				<include name="**/*.java"/>
+			</fileset>
+			<classpath>
+				<path refid="classpath_jars"/>
+			</classpath>
+			<doctitle><![CDATA[<h1>${ant.project.name}</h1>]]></doctitle>
+			<bottom><![CDATA[<i>Copyright &#169; 2016 ${Author}. All Rights Reserved.</i>]]></bottom>
+			<tag name="todo" scope="all" description="To do:"/>
+			<group title="Packages" packages="${pkg_base}.*"/>
+			<link offline="false" href="http://download.oracle.com/javase/6/docs/api/"/>
+		</javadoc>
+	</target>
+	
+
+	<!-- ============ TARGET: DEFAULT ================== -->
+	<target name="Default" depends="Clean">
+		<echo message ="Ant run will execute the test"/>
+	</target>
+	
+	<path id = "test.c">
+	<fileset dir="${Workspace_jars}" includes="*.jar"/>
+	</path>
+
+	<!-- ============ TARGET: GeneratingReports (Xslt report) ================== -->
+	<target name="GenerateXsltReport">
+		
+		<mkdir dir="${Workspace_home}/XSLT_Reports/output"/>
+		
+		<xslt in="${Testng_results}/testng-results.xml" style="src/xslt/testng-results.xsl"
+		out ="${Workspace_home}/XSLT_Reports/output/index.html" classpathref="test.c" processor="SaxonLiaison">
+	    
+	    <param name="testNgXslt.outputDir" expression="${Workspace_home}/XSLT_Reports/output"/>
+		<param name="testNgXslt.showRuntimeTotals" expression="true"/>	
+		<param name="testNgXslt.sortTestCaseLinks" expression="true" />
+		<param name="testNgXslt.testDetailsFilter" expression="FAIL,SKIP,PASS,CONF,BY_CLASS" />
+		
+		</xslt>
+	
+	</target>	
+		
+		<!-- ====================== Target: ViewReport ======================= -->
+		
+	<target name="ViewReport-TestNG" >
+	
+		<exec executable="${Browser}/chrome" spawn="yes">
+			<!--change to .exe for chromium browser if it is in windows for ubuntu .exe not required -->
+		<arg line="${Workspace_home}/test-output/emailable-report.html" />
+	    </exec>
+		
+    </target>
+	
+
+		<!-- ====================== Target: SendEmail ========================== -->
+	
+	
+		 
+	<target name="SendMail">
+	
+	<property name="testngXslt.report.dir" value="${Workspace_home}/XSLT_Reports/output/"/>
+		
+	<fileset dir="${testngXslt.report.dir}" includes="*"/>
+	
+		 <zip destfile="${testngXslt.report.dir}/Report.zip" basedir="${testngXslt.report.dir}"/>
+		
+		
+	<mail mailhost="smtp.gmail.com" mailport="465" subject="Notification of TESTNG build result" ssl="false" user="xxxxx@gmail.com" password="xxxxxx">
+	<from address="xxxxxxx@gmail.com"/>
+	<to address="yyyyyyy@gmail.com"/>
+		
+	<message>The build has finished. A details report of this build is attached</message>
+	
+	<attachments> 
+	<fileset dir="${Workspace_home}/XSLT_Reports/output">
+	<include name="**/*.zip"/>
+	</fileset>
+	</attachments>
+	
+	</mail>
+	
+	</target>
+		
+</project>
